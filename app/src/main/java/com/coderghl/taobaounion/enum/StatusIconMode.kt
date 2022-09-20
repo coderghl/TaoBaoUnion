@@ -1,6 +1,6 @@
 package com.coderghl.taobaounion.enum
 
-enum class IconMode {
+enum class StatusIconMode {
     DAY_NIGHT,
     NIGHT
 }

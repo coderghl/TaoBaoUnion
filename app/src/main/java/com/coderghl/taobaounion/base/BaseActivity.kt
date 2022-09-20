@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.viewbinding.ViewBinding
-import com.coderghl.taobaounion.enum.IconMode
+import com.coderghl.taobaounion.enum.StatusIconMode
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
@@ -32,23 +32,23 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
             }
         }
 
-        setStateBarColor()
+        setStatusBarColor()
         onCreate()
     }
 
     //** 设置沉浸式状态栏 *//
-    open fun setStateBarColor(
+    open fun setStatusBarColor(
         color: Int = Color.TRANSPARENT,
-        iconMode: IconMode = IconMode.DAY_NIGHT
+        iconMode: StatusIconMode = StatusIconMode.DAY_NIGHT
     ) {
         val controller = ViewCompat.getWindowInsetsController(window.decorView)
         when (iconMode) {
-            IconMode.DAY_NIGHT -> controller?.let {
+            StatusIconMode.DAY_NIGHT -> controller?.let {
                 it.isAppearanceLightNavigationBars = true
                 it.isAppearanceLightStatusBars = true
             }
 
-            IconMode.NIGHT -> controller?.let {
+            StatusIconMode.NIGHT -> controller?.let {
                 it.isAppearanceLightNavigationBars = false
                 it.isAppearanceLightStatusBars = false
             }

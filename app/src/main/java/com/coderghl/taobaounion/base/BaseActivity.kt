@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.viewbinding.ViewBinding
+import com.coderghl.taobaounion.R
 import com.coderghl.taobaounion.enum.StatusIconMode
 import java.lang.reflect.ParameterizedType
 
@@ -32,11 +33,15 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
             }
         }
 
-        setStatusBarColor()
+        setStatusBarColor(resources.getColor(R.color.purple_500), StatusIconMode.NIGHT)
+
+        loadData()
         onCreate()
     }
 
-    //** 设置沉浸式状态栏 *//
+    /**
+     * 设置沉浸式状态栏
+     * */
     open fun setStatusBarColor(
         color: Int = Color.TRANSPARENT,
         iconMode: StatusIconMode = StatusIconMode.DAY_NIGHT
@@ -57,6 +62,13 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         window.statusBarColor = color
     }
 
-
+    /**
+     * 注册创建回调
+     * */
     abstract fun onCreate()
+
+    /**
+     * 请求数据方法
+     */
+    open fun loadData() {}
 }

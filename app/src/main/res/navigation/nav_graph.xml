@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_home">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.coderghl.taobaounion.ui.fragment.HomeFragment"
+        android:name="com.coderghl.taobaounion.ui.fragment.homefragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment

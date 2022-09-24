@@ -9,6 +9,8 @@
         <entry key="app/src/main/res/drawable/ic_public_off_fill0_wght400_grad0_opsz48.xml" value="0.39" />
         <entry key="app/src/main/res/drawable/ic_scan.xml" value="0.269" />
         <entry key="app/src/main/res/drawable/selector_search_edit.xml" value="0.269" />
+        <entry key="app/src/main/res/drawable/shape_banner_indicaotr.xml" value="0.255" />
+        <entry key="app/src/main/res/drawable/shape_banner_indicaotr_action.xml" value="0.255" />
         <entry key="app/src/main/res/drawable/shape_tag_bg.xml" value="0.3055" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.325" />
         <entry key="app/src/main/res/layout/fragment_half.xml" value="0.29074074074074074" />

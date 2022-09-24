@@ -5,19 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.coderghl.taobaounion.databinding.ListHomePagerContentBannerItemBinding
 import com.coderghl.taobaounion.databinding.ListHomePagerContentItemItemBinding
 import com.coderghl.taobaounion.model.bean.HomePagerContent
-import java.util.*
 import kotlin.collections.ArrayList
 
 class HomePagerContentListAdapter() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    companion object {
-        const val BANNER = 0
-        const val ITEM = 1
-    }
 
     private var listData: ArrayList<HomePagerContent.Data> = ArrayList()
     private var bannerData: ArrayList<HomePagerContent.Data> = ArrayList()
@@ -25,12 +18,7 @@ class HomePagerContentListAdapter() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val listBinding = ListHomePagerContentItemItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val bannerBinding = ListHomePagerContentBannerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-        return when (viewType) {
-            BANNER -> BannerHolder(bannerBinding)
-            else -> ItemHolder(listBinding)
-        }
+        return ItemHolder(listBinding)
     }
 
 
@@ -42,11 +30,6 @@ class HomePagerContentListAdapter() :
 
     override fun getItemCount() = listData.size
 
-
-    override fun getItemViewType(position: Int) = when (position) {
-        0 -> BANNER
-        else -> ITEM
-    }
 
     inner class ItemHolder(private var binding: ListHomePagerContentItemItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -70,13 +53,6 @@ class HomePagerContentListAdapter() :
         }
     }
 
-
-    inner class BannerHolder(private var binding: ListHomePagerContentBannerItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.banner.adapter = HomeBannerAdapter(bannerData)
-        }
-    }
-
     /**
      * 设置列表数据
      */
@@ -85,15 +61,4 @@ class HomePagerContentListAdapter() :
         listData.addAll(newData)
         notifyItemRangeChanged(1, listData.size)
     }
-
-
-    /**
-     * 设置轮播图数据
-     */
-    fun initBannerData(newData: List<HomePagerContent.Data>) {
-        bannerData.clear()
-        bannerData.addAll(newData)
-        notifyItemChanged(0)
-    }
-
 }

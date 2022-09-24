@@ -1,6 +1,14 @@
 package com.coderghl.taobaounion.ui.fragment.homefragment
 
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.children
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
+import com.coderghl.taobaounion.R
 import com.coderghl.taobaounion.base.BaseFragment
 import com.coderghl.taobaounion.databinding.FragmentHomePagerBinding
 import com.coderghl.taobaounion.enum.NetworkState
@@ -10,18 +18,34 @@ import com.coderghl.taobaounion.presenter.impl.HomePagerContentPresenterImpl
 import com.coderghl.taobaounion.ui.adapter.HomeBannerAdapter
 import com.coderghl.taobaounion.ui.adapter.HomePagerContentListAdapter
 import com.coderghl.taobaounion.utils.LogUtils
+import com.coderghl.taobaounion.utils.dp2px
 import com.coderghl.taobaounion.view.IHomePagerContentCallback
+import java.util.*
 
 class HomePagerContentFragment(private val data: HomeCategories.Data) :
     BaseFragment<FragmentHomePagerBinding>(), IHomePagerContentCallback {
 
     private var presenter: HomePagerContentPresenterImpl? = null
-
     private var homePagerContentListAdapter = HomePagerContentListAdapter()
+    private var homeBannerAdapter = HomeBannerAdapter()
+    private var bannerTimer: Timer? = null
+    private var bannerPageCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            binding.bannerIndicator.forEach {
+                it.setBackgroundResource(R.drawable.shape_banner_indicaotr)
+            }
+
+            binding.bannerIndicator.getChildAt(position)
+                .setBackgroundResource(R.drawable.shape_banner_indicaotr_action)
+        }
+    }
 
     override fun onViewCreated() {
         binding.homePagerList.layoutManager = LinearLayoutManager(requireContext())
         binding.homePagerList.adapter = homePagerContentListAdapter
+        binding.banner.adapter = homeBannerAdapter
+        binding.banner.registerOnPageChangeCallback(bannerPageCallback)
 
         LogUtils.d(this, "title: ${data.title}")
         LogUtils.d(this, "id: ${data.id}")
@@ -39,6 +63,9 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      * 释放资源
      */
     override fun release() {
+        bannerTimer?.cancel()
+        bannerTimer = null
+        binding.banner.unregisterOnPageChangeCallback(bannerPageCallback)
         presenter?.unRegisterCallback(this)
     }
 
@@ -62,7 +89,44 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      * 加载轮播图数据成功
      */
     override fun onLoopBannerSuccess(contents: List<HomePagerContent.Data>) {
-        homePagerContentListAdapter.initBannerData(contents)
+        homeBannerAdapter.initBannerData(contents)
+        initBannerIndicator()
+        startLoopBanner()
+    }
+
+    /**
+     * 启动轮播图
+     */
+    private fun startLoopBanner() {
+        bannerTimer = Timer()
+        bannerTimer?.schedule(
+            object : TimerTask() {
+                override fun run() {
+                    if (binding.banner.currentItem + 1 < homeBannerAdapter.itemCount) {
+                        binding.banner.currentItem += 1
+                    } else {
+                        requireActivity().runOnUiThread {
+                            binding.banner.setCurrentItem(0, true)
+                        }
+                    }
+                }
+            }, 2000, 2000
+        )
+    }
+
+    /**
+     * 初始化banner indicator
+     */
+    private fun initBannerIndicator() {
+        binding.bannerIndicator.removeAllViews()
+        val layoutParams = LinearLayoutCompat.LayoutParams(8.dp2px(requireContext()).toInt(), 8.dp2px(requireContext()).toInt())
+        layoutParams.setMargins(4.dp2px(requireContext()).toInt(), 0, 8.dp2px(requireContext()).toInt(), 0)
+        for (i in 0 until homeBannerAdapter.itemCount) {
+            val indicator = View(requireContext())
+            indicator.layoutParams = layoutParams
+            indicator.setBackgroundResource(R.drawable.shape_banner_indicaotr)
+            binding.bannerIndicator.addView(indicator)
+        }
     }
 
 

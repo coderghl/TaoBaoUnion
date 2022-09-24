@@ -1,12 +1,10 @@
 package com.coderghl.taobaounion.ui.fragment.homefragment
 
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.coderghl.taobaounion.R
 import com.coderghl.taobaounion.base.BaseFragment
@@ -29,6 +27,10 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
     private var homePagerContentListAdapter = HomePagerContentListAdapter()
     private var homeBannerAdapter = HomeBannerAdapter()
     private var bannerTimer: Timer? = null
+
+    /**
+     * banner 滑动事件监听
+     */
     private var bannerPageCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
@@ -41,11 +43,20 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
         }
     }
 
+    /**
+     * 下拉刷新事件监听
+     */
+    private var refreshListener = SwipeRefreshLayout.OnRefreshListener {
+
+    }
+
     override fun onViewCreated() {
         binding.homePagerList.layoutManager = LinearLayoutManager(requireContext())
         binding.homePagerList.adapter = homePagerContentListAdapter
         binding.banner.adapter = homeBannerAdapter
         binding.banner.registerOnPageChangeCallback(bannerPageCallback)
+        binding.refreshLayout.setColorSchemeColors(requireContext().getColor(R.color.purple_500))
+        binding.refreshLayout.setOnRefreshListener(refreshListener)
 
         LogUtils.d(this, "title: ${data.title}")
         LogUtils.d(this, "id: ${data.id}")

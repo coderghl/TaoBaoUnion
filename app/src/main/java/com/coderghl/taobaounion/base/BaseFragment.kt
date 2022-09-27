@@ -9,7 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.coderghl.taobaounion.R
 import com.coderghl.taobaounion.enum.NetworkState
-import com.coderghl.taobaounion.utils.LogUtils
+import com.coderghl.taobaounion.utils.LogUtil
+import com.coderghl.taobaounion.utils.ToastUtil
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
@@ -91,7 +92,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
      */
     open fun switchState(networkState: NetworkState, container: ViewGroup) {
         currentPageNetworkState = networkState
-        LogUtils.d(this, currentPageNetworkState.toString())
+        LogUtil.d(this, currentPageNetworkState.toString())
         when (currentPageNetworkState) {
             NetworkState.LOADING -> container.addView(getLoadingView(container))
             NetworkState.NO_NETWORK -> {
@@ -99,7 +100,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 container.addView(getNoNetworkView(container))
                 // 无网络点击图标重新去请求尝试
                 container.children.last().setOnClickListener {
-                    LogUtils.d(this, "retry...")
+                    LogUtil.d(this, "retry...")
                     retryTap()
                     container.removeViewAt(container.children.toList().size - 1)
                 }
@@ -113,7 +114,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 container.addView(getErrorView(container))
                 // 请求错误点击图标重新去请求尝试
                 container.children.last().setOnClickListener {
-                    LogUtils.d(this, "retry...")
+                    LogUtil.d(this, "retry...")
                     retryTap()
                     container.removeViewAt(container.children.toList().size - 1)
                 }
@@ -130,6 +131,13 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
      */
     open fun retryTap() {}
 
+
+    /**
+     * 提示弹窗
+     */
+    open fun showToast(message: String) {
+        ToastUtil.showToast(requireActivity(), message)
+    }
 
     override fun onDestroy() {
         release()

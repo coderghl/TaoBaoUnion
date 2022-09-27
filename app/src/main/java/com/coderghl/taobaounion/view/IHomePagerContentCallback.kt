@@ -11,12 +11,6 @@ interface IHomePagerContentCallback : IBaseCallback {
     fun onContentSuccess(contents: List<HomePagerContent.Data>)
 
     /**
-     * 加载更多
-     */
-    fun onLoadMore()
-
-
-    /**
      * 加载更多成功
      */
     fun onLoadMoreSuccess(contents: List<HomePagerContent.Data>)
@@ -38,5 +32,10 @@ interface IHomePagerContentCallback : IBaseCallback {
      * 加载更多时网络错误
      */
     fun onLoadMoreError()
+
+    /**
+     * 刷新数据
+     */
+    fun onRefreshSuccess(contents: List<HomePagerContent.Data>)
 
 }

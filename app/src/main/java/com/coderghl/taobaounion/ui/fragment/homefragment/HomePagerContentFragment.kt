@@ -1,12 +1,16 @@
 package com.coderghl.taobaounion.ui.fragment.homefragment
 
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.forEach
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.coderghl.taobaounion.R
+import com.coderghl.taobaounion.*
 import com.coderghl.taobaounion.base.BaseFragment
 import com.coderghl.taobaounion.databinding.FragmentHomePagerBinding
 import com.coderghl.taobaounion.enum.NetworkState
@@ -15,10 +19,11 @@ import com.coderghl.taobaounion.model.bean.HomePagerContent
 import com.coderghl.taobaounion.presenter.impl.HomePagerContentPresenterImpl
 import com.coderghl.taobaounion.ui.adapter.HomeBannerAdapter
 import com.coderghl.taobaounion.ui.adapter.HomePagerContentListAdapter
-import com.coderghl.taobaounion.utils.LogUtils
+import com.coderghl.taobaounion.utils.LogUtil
 import com.coderghl.taobaounion.utils.dp2px
 import com.coderghl.taobaounion.view.IHomePagerContentCallback
 import java.util.*
+
 
 class HomePagerContentFragment(private val data: HomeCategories.Data) :
     BaseFragment<FragmentHomePagerBinding>(), IHomePagerContentCallback {
@@ -47,19 +52,39 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      * 下拉刷新事件监听
      */
     private var refreshListener = SwipeRefreshLayout.OnRefreshListener {
+        LogUtil.d(this, "refresh")
+        presenter?.onRefresh(data.id)
 
     }
+
+    /**
+     * 上滑加载更多事件监听
+     */
+    private var loadingMoreListener =
+        NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight) {
+                LogUtil.d(this, "LoadMore true")
+                presenter?.loadMore(data.id)
+            } else {
+                LogUtil.d(this, "LoadMore false")
+            }
+        }
 
     override fun onViewCreated() {
         binding.homePagerList.layoutManager = LinearLayoutManager(requireContext())
         binding.homePagerList.adapter = homePagerContentListAdapter
+        binding.homePagerList.isNestedScrollingEnabled = false
+
+        binding.nestedScrollView.setOnScrollChangeListener(loadingMoreListener)
+
         binding.banner.adapter = homeBannerAdapter
         binding.banner.registerOnPageChangeCallback(bannerPageCallback)
+
         binding.refreshLayout.setColorSchemeColors(requireContext().getColor(R.color.purple_500))
         binding.refreshLayout.setOnRefreshListener(refreshListener)
 
-        LogUtils.d(this, "title: ${data.title}")
-        LogUtils.d(this, "id: ${data.id}")
+        LogUtil.d(this, "title: ${data.title}")
+        LogUtil.d(this, "id: ${data.id}")
     }
 
     /**
@@ -93,6 +118,7 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
     override fun onContentSuccess(contents: List<HomePagerContent.Data>) {
         switchState(NetworkState.SUCCESS, binding.container)
         homePagerContentListAdapter.initListData(contents)
+        binding.homePagerList.visibility = View.VISIBLE
     }
 
 
@@ -140,19 +166,12 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
         }
     }
 
-
-    /**
-     * 加载更多
-     */
-    override fun onLoadMore() {
-
-    }
-
     /**
      * 加载更多成功
      */
     override fun onLoadMoreSuccess(contents: List<HomePagerContent.Data>) {
-
+        showToast("加载了${contents.size}个商品")
+        homePagerContentListAdapter.onLoadMoreData(contents)
     }
 
 
@@ -160,12 +179,23 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      * 加载更多数据为空
      */
     override fun onLoadMoreEmpty() {
+        showToast("没有更多数据")
     }
 
     /**
      * 加载更多数据失败
      */
     override fun onLoadMoreError() {
+        showToast("网络异常请稍后重试")
+    }
+
+    /**
+     * 刷新数据
+     */
+    override fun onRefreshSuccess(contents: List<HomePagerContent.Data>) {
+        showToast("刷新了数据")
+        homePagerContentListAdapter.onRefreshData(contents)
+        binding.refreshLayout.isRefreshing = false
     }
 
     /**

@@ -2,7 +2,7 @@ package com.coderghl.taobaounion.utils
 
 import android.util.Log
 
-object LogUtils {
+object LogUtil {
     private const val DEBUG_LEVEL = 4
     private const val INFO_LEVEL = 3
     private const val WARNING_LEVEL = 2

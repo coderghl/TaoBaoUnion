@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.viewbinding.ViewBinding
 import com.coderghl.taobaounion.R
 import com.coderghl.taobaounion.enum.StatusIconMode
+import com.coderghl.taobaounion.utils.ToastUtil
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
@@ -71,4 +72,11 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
      * 请求数据方法
      */
     open fun loadData() {}
+
+    /**
+     * 提示弹窗
+     */
+    open fun showToast(message: String) {
+        ToastUtil.showToast(this, message)
+    }
 }

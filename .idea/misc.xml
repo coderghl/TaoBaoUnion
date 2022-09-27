@@ -22,6 +22,7 @@
         <entry key="app/src/main/res/layout/list_category_pager_item.xml" value="0.3648148148148148" />
         <entry key="app/src/main/res/layout/list_home_pager_content_banner_item.xml" value="0.4078125" />
         <entry key="app/src/main/res/layout/list_home_pager_content_item_item.xml" value="0.4088541666666667" />
+        <entry key="app/src/main/res/layout/list_loading_item.xml" value="0.33240740740740743" />
         <entry key="app/src/main/res/layout/no_empty_layout.xml" value="0.3148148148148148" />
         <entry key="app/src/main/res/layout/no_netework_layout.xml" value="0.3859375" />
         <entry key="app/src/main/res/layout/on_error_layout.xml" value="0.3148148148148148" />

@@ -10,11 +10,16 @@ interface IHomePagerContentPresenter {
     /**
      * 加载更多
      */
-    fun loadMore(categoryId: Int)
+    fun loadMore(categoryId: Int,isRefresh: Boolean = false)
 
     /**
      * 重新加载
      */
     fun retry(categoryId: Int)
+
+    /**
+     * 刷新数据
+     */
+    fun onRefresh(categoryId: Int)
 
 }

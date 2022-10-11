@@ -136,11 +136,10 @@ class HomePagerContentPresenterImpl : IHomePagerContentPresenter, IBasePresenter
     private fun handleLoadMoreResult(data: List<HomePagerContent.Data>) {
         isLoadingMore = false
         if (data.isEmpty()) {
-            mCallback?.onLoadMoreError()
+            mCallback?.onLoadMoreEmpty()
         } else {
             mCallback?.onLoadMoreSuccess(data)
         }
-
     }
 
     /**

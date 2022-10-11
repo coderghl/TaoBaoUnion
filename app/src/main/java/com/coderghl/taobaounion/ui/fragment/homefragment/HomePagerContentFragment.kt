@@ -54,7 +54,6 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
     private var refreshListener = SwipeRefreshLayout.OnRefreshListener {
         LogUtil.d(this, "refresh")
         presenter?.onRefresh(data.id)
-
     }
 
     /**
@@ -180,6 +179,7 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      */
     override fun onLoadMoreEmpty() {
         showToast("没有更多数据")
+        binding.refreshLayout.isRefreshing = false
     }
 
     /**
@@ -187,6 +187,7 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      */
     override fun onLoadMoreError() {
         showToast("网络异常请稍后重试")
+        binding.refreshLayout.isRefreshing = false
     }
 
     /**

@@ -64,10 +64,12 @@ class HomePagerContentListAdapter() :
             Glide.with(binding.picImage).load("https:${data.pict_url}_200x200.jpg")
                 .override(binding.picImage.width, binding.picImage.height)
                 .into(binding.picImage)
-//            LogUtil.d(this@HomePagerContentListAdapter, "https:${data.pict_url}")
-//            LogUtil.d(this@HomePagerContentListAdapter, binding.materialCardView.layoutParams.height.toString())
-//            LogUtil.d(this@HomePagerContentListAdapter, binding.materialCardView.layoutParams.width.toString())
 
+
+            // setListener
+            itemView.setOnClickListener {
+
+            }
         }
     }
 

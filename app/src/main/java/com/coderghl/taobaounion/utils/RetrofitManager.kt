@@ -19,9 +19,9 @@ class RetrofitManager private constructor() {
 
 
     companion object {
-        const val BASE_URL: String = "https://api.sunofbeaches.com/shop/"
+        private const val BASE_URL: String = "https://api.sunofbeaches.com/shop/"
 
-        var instance: RetrofitManager? = null
+        private var instance: RetrofitManager? = null
             get() {
                 if (field == null) {
                     field = RetrofitManager()

@@ -2,18 +2,26 @@ package com.coderghl.taobaounion.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.coderghl.taobaounion.databinding.PagerBannerItemItemBinding
 import com.coderghl.taobaounion.model.bean.HomePagerContent
 
-class HomeBannerAdapter(private var data: ArrayList<HomePagerContent.Data> = ArrayList()) :
+class HomeBannerAdapter(
+    private var data: ArrayList<HomePagerContent.Data> = ArrayList(),
+    private val onItemClickListener: (HomePagerContent.Data) -> Unit
+) :
     RecyclerView.Adapter<HomeBannerAdapter.InnerHolder>() {
 
     inner class InnerHolder(private var binding: PagerBannerItemItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: HomePagerContent.Data) {
             Glide.with(binding.picImage).load("https:${data.pict_url}").override(binding.picImage.width, binding.picImage.height)
                 .into(binding.picImage)
+
+            itemView.setOnClickListener {
+                onItemClickListener.invoke(data)
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.coderghl.taobaounion.ui.adapter
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,10 +10,11 @@ import com.bumptech.glide.Glide
 import com.coderghl.taobaounion.databinding.ListHomePagerContentItemItemBinding
 import com.coderghl.taobaounion.databinding.ListLoadingItemBinding
 import com.coderghl.taobaounion.model.bean.HomePagerContent
+import com.coderghl.taobaounion.ui.activity.TicketActivity
 import com.coderghl.taobaounion.utils.LogUtil
 import kotlin.collections.ArrayList
 
-class HomePagerContentListAdapter() :
+class HomePagerContentListAdapter(val onItemClickListener: (HomePagerContent.Data) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -64,10 +67,12 @@ class HomePagerContentListAdapter() :
             Glide.with(binding.picImage).load("https:${data.pict_url}_200x200.jpg")
                 .override(binding.picImage.width, binding.picImage.height)
                 .into(binding.picImage)
-//            LogUtil.d(this@HomePagerContentListAdapter, "https:${data.pict_url}")
-//            LogUtil.d(this@HomePagerContentListAdapter, binding.materialCardView.layoutParams.height.toString())
-//            LogUtil.d(this@HomePagerContentListAdapter, binding.materialCardView.layoutParams.width.toString())
 
+
+            // setListener
+            itemView.setOnClickListener {
+                onItemClickListener.invoke(data)
+            }
         }
     }
 

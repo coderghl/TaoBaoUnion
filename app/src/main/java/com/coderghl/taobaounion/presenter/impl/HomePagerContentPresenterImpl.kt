@@ -72,7 +72,6 @@ class HomePagerContentPresenterImpl : IHomePagerContentPresenter, IBasePresenter
      */
     private fun requestTask(categoryId: Int): Call<HomePagerContent> {
         val url = getUrl(categoryId, currentPage)
-        LogUtil.d(this, "Url: ${RetrofitManager.BASE_URL}$url")
         return RetrofitManager.get().getApi().getHomePageContent(url)
     }
 
@@ -136,11 +135,10 @@ class HomePagerContentPresenterImpl : IHomePagerContentPresenter, IBasePresenter
     private fun handleLoadMoreResult(data: List<HomePagerContent.Data>) {
         isLoadingMore = false
         if (data.isEmpty()) {
-            mCallback?.onLoadMoreError()
+            mCallback?.onLoadMoreEmpty()
         } else {
             mCallback?.onLoadMoreSuccess(data)
         }
-
     }
 
     /**

@@ -1,13 +1,11 @@
 package com.coderghl.taobaounion.ui.fragment.homefragment
 
+import android.content.Intent
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.forEach
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.coderghl.taobaounion.*
@@ -17,6 +15,7 @@ import com.coderghl.taobaounion.enum.NetworkState
 import com.coderghl.taobaounion.model.bean.HomeCategories
 import com.coderghl.taobaounion.model.bean.HomePagerContent
 import com.coderghl.taobaounion.presenter.impl.HomePagerContentPresenterImpl
+import com.coderghl.taobaounion.ui.activity.TicketActivity
 import com.coderghl.taobaounion.ui.adapter.HomeBannerAdapter
 import com.coderghl.taobaounion.ui.adapter.HomePagerContentListAdapter
 import com.coderghl.taobaounion.utils.LogUtil
@@ -29,9 +28,26 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
     BaseFragment<FragmentHomePagerBinding>(), IHomePagerContentCallback {
 
     private var presenter: HomePagerContentPresenterImpl? = null
-    private var homePagerContentListAdapter = HomePagerContentListAdapter()
-    private var homeBannerAdapter = HomeBannerAdapter()
+    private var homePagerContentListAdapter = HomePagerContentListAdapter {
+        handleItemClick(it)
+    }
+    private var homeBannerAdapter = HomeBannerAdapter {
+        handleItemClick(it)
+    }
+
     private var bannerTimer: Timer? = null
+    private var stop = false
+
+    /**
+     * 处理条目点击跳转事件
+     */
+    private fun handleItemClick(data: HomePagerContent.Data) {
+        val intent = Intent(requireActivity(), TicketActivity::class.java)
+        intent.putExtra("title", data.title)
+        intent.putExtra("coupon_click_url", if (data.coupon_click_url?.isEmpty() == true) data.click_url else data.coupon_click_url)
+        intent.putExtra("pict_url", data.pict_url)
+        startActivity(intent)
+    }
 
     /**
      * banner 滑动事件监听
@@ -54,7 +70,6 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
     private var refreshListener = SwipeRefreshLayout.OnRefreshListener {
         LogUtil.d(this, "refresh")
         presenter?.onRefresh(data.id)
-
     }
 
     /**
@@ -78,7 +93,6 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
         binding.nestedScrollView.setOnScrollChangeListener(loadingMoreListener)
 
         binding.banner.adapter = homeBannerAdapter
-        binding.banner.registerOnPageChangeCallback(bannerPageCallback)
 
         binding.refreshLayout.setColorSchemeColors(requireContext().getColor(R.color.purple_500))
         binding.refreshLayout.setOnRefreshListener(refreshListener)
@@ -99,9 +113,7 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      * 释放资源
      */
     override fun release() {
-        bannerTimer?.cancel()
-        bannerTimer = null
-        binding.banner.unregisterOnPageChangeCallback(bannerPageCallback)
+        stopBanner()
         presenter?.unRegisterCallback(this)
     }
 
@@ -135,6 +147,7 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      * 启动轮播图
      */
     private fun startLoopBanner() {
+        binding.banner.registerOnPageChangeCallback(bannerPageCallback)
         bannerTimer = Timer()
         bannerTimer?.schedule(
             object : TimerTask() {
@@ -149,6 +162,35 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
                 }
             }, 2000, 2000
         )
+    }
+
+    /**
+     * 停止轮博图
+     */
+    private fun stopBanner() {
+        bannerTimer?.cancel()
+        bannerTimer = null
+        binding.banner.unregisterOnPageChangeCallback(bannerPageCallback)
+    }
+
+    /**
+     * 当离开页面暂停轮播图
+     */
+    override fun onStop() {
+        super.onStop()
+        stopBanner()
+        stop = true
+    }
+
+    /**
+     * 当从其他的页面回来时启动轮播图
+     */
+    override fun onResume() {
+        super.onResume()
+        if (stop) {
+            startLoopBanner()
+            stop = false
+        }
     }
 
     /**
@@ -180,6 +222,7 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      */
     override fun onLoadMoreEmpty() {
         showToast("没有更多数据")
+        binding.refreshLayout.isRefreshing = false
     }
 
     /**
@@ -187,6 +230,7 @@ class HomePagerContentFragment(private val data: HomeCategories.Data) :
      */
     override fun onLoadMoreError() {
         showToast("网络异常请稍后重试")
+        binding.refreshLayout.isRefreshing = false
     }
 
     /**

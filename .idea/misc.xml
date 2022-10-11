@@ -3,16 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.4325" />
+        <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml" value="0.4325" />
         <entry key="app/src/main/res/drawable/ic_empty.xml" value="0.2505" />
         <entry key="app/src/main/res/drawable/ic_error_fill0_wght400_grad0_opsz48.xml" value="0.2505" />
         <entry key="app/src/main/res/drawable/ic_favorite_fill0_wght400_grad0_opsz48.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_home_fill0_wght400_grad0_opsz48.xml" value="0.4325" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.4325" />
         <entry key="app/src/main/res/drawable/ic_public_off_fill0_wght400_grad0_opsz48.xml" value="0.39" />
         <entry key="app/src/main/res/drawable/ic_scan.xml" value="0.269" />
+        <entry key="app/src/main/res/drawable/ic_search_fill0_wght400_grad0_opsz48.xml" value="0.4325" />
+        <entry key="app/src/main/res/drawable/ic_star_half_fill0_wght400_grad0_opsz48.xml" value="0.4325" />
         <entry key="app/src/main/res/drawable/selector_search_edit.xml" value="0.269" />
         <entry key="app/src/main/res/drawable/shape_banner_indicaotr.xml" value="0.255" />
         <entry key="app/src/main/res/drawable/shape_banner_indicaotr_action.xml" value="0.255" />
         <entry key="app/src/main/res/drawable/shape_tag_bg.xml" value="0.3055" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.325" />
+        <entry key="app/src/main/res/layout/activity_ticket.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_half.xml" value="0.29074074074074074" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3962962962962963" />
         <entry key="app/src/main/res/layout/fragment_home_pager.xml" value="0.3478038815117467" />

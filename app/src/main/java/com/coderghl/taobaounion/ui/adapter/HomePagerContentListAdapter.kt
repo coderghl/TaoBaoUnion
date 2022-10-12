@@ -1,7 +1,5 @@
 package com.coderghl.taobaounion.ui.adapter
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +8,6 @@ import com.bumptech.glide.Glide
 import com.coderghl.taobaounion.databinding.ListHomePagerContentItemItemBinding
 import com.coderghl.taobaounion.databinding.ListLoadingItemBinding
 import com.coderghl.taobaounion.model.bean.HomePagerContent
-import com.coderghl.taobaounion.ui.activity.TicketActivity
 import com.coderghl.taobaounion.utils.LogUtil
 import kotlin.collections.ArrayList
 
